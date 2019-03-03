@@ -21,7 +21,7 @@ mongoose.connect("mongodb://localhost/scraper", {
   useNewUrlParser: true
 });
 
-require("./routes/routes.js")(app, axios, cheerio, db);
+require("./routes/routes.js")(app, axios, cheerio, db, mongoose);
 
 app.engine(
   "handlebars",

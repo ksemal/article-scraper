@@ -1,13 +1,14 @@
-//var db = require("./models");
-module.exports = function(app, axios, cheerio, db) {
-  app.post("/scraped", function(req, res) {
+module.exports = function(app, axios, cheerio, db, mongoose) {
+  app.post("/scrape", function(req, res) {
+    db.Article.deleteMany({ saved: false }, function(err) {
+      if (err) return handleError(err);
+    });
     axios
       .get("https://www.newsweek.com/newsfeed")
       .then(function(response) {
         var $ = cheerio.load(response.data);
         var result = {};
         $("article").each(function(i, element) {
-          console.log(i);
           if (i <= 20) {
             result.title = $(this)
               .find(".inner")
@@ -40,20 +41,30 @@ module.exports = function(app, axios, cheerio, db) {
           } else {
             return;
           }
-          console.log(result);
-          //         // db.Article.create(result)
-          //         //   .then(function(dbArticle) {
-          //         //     console.log(dbArticle);
-          //         //   })
-          //         //   .catch(function(err) {
-          //         //     console.log(err);
-          //         //   });
-          //       });
-
-          //});
+          db.Article.create(result)
+            .then(function(dbArticle) {})
+            .catch(function(err) {
+              console.log(err);
+            });
         });
+      })
+      .catch(function(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
 
-        res.send("scraped");
+    res.redirect("/");
+  });
+
+  app.get("/", function(req, res) {
+    db.Article.find({})
+      .then(function(response) {
+        if (Object.keys(response).length === 0) {
+          res.render("noArticles");
+        } else {
+          res.render("articles", { newArticles: response });
+        }
       })
       .catch(function(err) {
         if (err) {
@@ -62,7 +73,30 @@ module.exports = function(app, axios, cheerio, db) {
       });
   });
 
-  app.get("/", function(req, res) {
-    res.render("noArticles");
+  app.post("/article/:id", function(req, res) {
+    db.Article.updateOne(
+      { _id: mongoose.Types.ObjectId(req.params.id) },
+      { $set: { saved: true } }
+    )
+      .then(function(response) {
+        res.send(response);
+      })
+      .catch(function(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+  });
+
+  app.get("/saved", function(req, res) {
+    db.Article.find({ saved: true })
+      .then(function(response) {
+        res.render("saved", { newArticles: response });
+      })
+      .catch(function(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
   });
 };

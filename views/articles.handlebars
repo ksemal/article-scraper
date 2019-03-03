@@ -1,0 +1,146 @@
+<div class="container">
+    <div class="header-section">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="left_section">
+                    <span class="date">
+                    </span>
+                    <span class="time">
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="logo">
+                    <a href="/">
+                        <h1>Article Scraper</h1>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation-section">
+        <nav class="navbar m-menu navbar-default">
+            <div class="container">
+                <ul class="nav navbar-nav main-nav">
+                    <li class="active"><a class="menu-button" href="/">Home</a></li>
+                    <li><a class="menu-button" href="/saved">Saved articles</a></li>
+                    <li>
+                        <button class="menu-button scrape">Scrape new
+                            articles</button>
+                    </li>
+                    <li>
+                        <button class="menu-button clear">Clear
+                            articles</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<section id="category_section" class="category_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="feature_article_wrapper">
+                    <div class="feature_article_img">
+                        <img class="img-responsive top_static_article_img" src="./img/feature-top.jpg"
+                            alt="feature-top" />
+                    </div>
+                    <div class="feature_article_inner">
+                        <div class="feature_article_title">
+                            <h1>
+                                Look! Here are fresh new articles for you.
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="category_section mobile">
+                    <div class="article_title header_purple">
+                        <h2>Articles</h2>
+                    </div>
+                    {{#each newArticles}}
+                    {{#unless saved}}
+                    <div class="category_article_wrapper">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="top_article_img">
+                                    <img class="img-responsive" src="{{this.image}}" alt="feature-top" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="category">{{this.category}}</span><span><i
+                                        class="fas fa-bookmark"></i><button class="menu-button save"
+                                        data-id="{{this._id}}">Save this
+                                        article</button></span>
+
+                                <div class="category_article_title">
+                                    <h2>
+                                        <a href="{{this.link}}" target="_blank">{{this.title}}</a>
+                                    </h2>
+                                </div>
+                                <hr>
+                                <div class="category_article_content">
+                                    {{this.summary}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/unless}}
+                    {{/each}}
+                    {{#each newArticles}}
+                    {{#if saved}}
+                    <div class="category_article_wrapper">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="top_article_img">
+                                    <img class="img-responsive" src="{{this.image}}" alt="feature-top" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="category">{{this.category}}</span><span><i class="fas fa-cloud"></i>This
+                                    article is already
+                                    saved</span>
+
+                                <div class="category_article_title">
+                                    <h2>
+                                        <a href="{{this.link}}" target="_blank">{{this.title}}</a>
+                                    </h2>
+                                </div>
+                                <hr>
+                                <div class="category_article_content">
+                                    {{this.summary}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+</section>
+
+<section id="footer_section" class="footer_section">
+    <div class="footer_bottom_Section">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="social">
+                        <p>
+                            Ksenia Malysheva<a class="icons-sm fb-ic"
+                                href="https://github.com/ksemal/article-scraper"><i class="fab fa-github"></i></a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-6"></div>
+                <div class="col-sm-3">
+                    <p>UNC Coding Bootcamp</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
