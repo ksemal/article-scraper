@@ -9,7 +9,7 @@ module.exports = function(app, axios, cheerio, db, mongoose) {
         var $ = cheerio.load(response.data);
         var result = {};
         $("article").each(function(i, element) {
-          if (i <= 20) {
+          if (i < 20) {
             result.title = $(this)
               .find(".inner")
               .find("h3")
@@ -58,7 +58,7 @@ module.exports = function(app, axios, cheerio, db, mongoose) {
   });
 
   app.get("/", function(req, res) {
-    db.Article.find({})
+    db.Article.find({ saved: false })
       .then(function(response) {
         if (Object.keys(response).length === 0) {
           res.render("noArticles");
@@ -90,7 +90,9 @@ module.exports = function(app, axios, cheerio, db, mongoose) {
 
   app.get("/saved", function(req, res) {
     db.Article.find({ saved: true })
+      .populate("note")
       .then(function(response) {
+        console.log(response);
         res.render("saved", { newArticles: response });
       })
       .catch(function(err) {
@@ -98,5 +100,65 @@ module.exports = function(app, axios, cheerio, db, mongoose) {
           console.log(err);
         }
       });
+  });
+  app.post("/clear", function(req, res) {
+    db.Article.deleteMany({ saved: false }, function(err) {
+      if (err) return handleError(err);
+    }).then(function(data) {
+      res.send(data);
+    });
+  });
+
+  app.post("/clear_saved/:id?", function(req, res) {
+    if (req.params.id) {
+      db.Article.deleteOne(
+        { _id: mongoose.Types.ObjectId(req.params.id) },
+        function(err) {
+          if (err) return handleError(err);
+        }
+      ).then(function(data) {
+        res.send("one");
+      });
+    } else {
+      db.Article.deleteMany({ saved: true }, function(err) {
+        if (err) return handleError(err);
+      }).then(function(data) {
+        res.send("many");
+      });
+    }
+  });
+
+  app.post("/add_note/:id", function(req, res) {
+    db.Note.create({ body: req.body.note }, function(err, insertedNote) {
+      db.Article.updateOne(
+        { _id: mongoose.Types.ObjectId(req.params.id) },
+        { $push: { note: insertedNote._id } }
+      )
+        .then(function() {
+          res.send({ noteId: insertedNote._id });
+        })
+        .catch(function(err) {
+          if (err) {
+            console.log(err);
+          }
+        });
+    });
+  });
+
+  app.post("/remove_note", function(req, res) {
+    db.Note.deleteOne({ _id: req.body.noteId }, function(err, deletedNote) {
+      db.Article.updateOne(
+        { _id: mongoose.Types.ObjectId(req.body.articleId) },
+        { $pullAll: { note: [req.body.noteId] } }
+      )
+        .then(function() {
+          res.send("removed");
+        })
+        .catch(function(err) {
+          if (err) {
+            console.log(err);
+          }
+        });
+    });
   });
 };

@@ -25,7 +25,7 @@
                 <ul class="nav navbar-nav main-nav">
                     <li class="active"><a class="menu-button" href="/">Home</a></li>
                     <li>
-                        <button class="menu-button clear-saved">Clear saved
+                        <button class="menu-button clear-saved" data-id="">Clear saved
                             articles</button>
                     </li>
                 </ul>
@@ -34,7 +34,7 @@
     </div>
 </div>
 
-<section id="category_section" class="category_section">
+<section id=" category_section" class="category_section">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -68,10 +68,11 @@
                             </div>
                             <div class="col-md-6">
                                 <span class="category">{{this.category}}</span><span><i class="fas fa-trash"></i><button
-                                        class="menu-button remove">
+                                        class="menu-button clear-saved" data-id="{{this._id}}">
                                         Remove from saved</button></span><span><i class="fas fa-comments"></i><button
-                                        class="menu-button notes">
-                                        Add comments</button></span>
+                                        class="menu-button notes" data-toggle="collapse"
+                                        data-target="#collapse{{this._id}}" aria-expanded="false">
+                                        Add/View comments</button></span>
 
                                 <div class="category_article_title">
                                     <h2>
@@ -81,6 +82,28 @@
                                 <hr>
                                 <div class="category_article_content">
                                     {{this.summary}}
+                                </div>
+                                <div class="collapse" id="collapse{{this._id}}" data-id="{{this._id}}">
+                                    <div class="card card-body">
+                                        Comments for this article:
+                                        <ul class="chat">
+                                            {{#each this.note}}
+                                            <li><i class="far fa-comments"></i>{{this.body}} <button
+                                                    class="remove-note btn-sm btn-outline-warning"
+                                                    data-id="{{this._id}}" type="button">X</button>
+                                                <hr>
+                                            </li>
+
+                                            {{/each}}
+                                        </ul>
+                                        <div class="comments">{{this.body}}</div>
+                                        <div class="input-group">
+                                            <textarea class="form-control text" aria-label="With textarea"></textarea>
+                                        </div>
+                                        <button class="add-note btn-sm btn-outline-secondary" data-id="{{this._id}}"
+                                            type="button">Add comment</button>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>

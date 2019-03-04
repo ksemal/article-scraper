@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 var ArticleSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   link: {
     type: String,
@@ -23,11 +24,13 @@ var ArticleSchema = new Schema({
   saved: {
     type: Boolean,
     default: false
-  }
-  //   note: {
-  //     type: Schema.Types.ObjectId,
-  //     ref: "Note"
-  //   }
+  },
+  note: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Note"
+    }
+  ]
 });
 
 // This creates our model from the above schema, using mongoose's model method

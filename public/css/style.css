@@ -1176,3 +1176,23 @@ i {
   top: 0;
   z-index: 9999;
 }
+
+.collapse {
+  margin-top: 15px;
+}
+.input-group {
+  margin-top: 15px;
+}
+.add-note {
+  margin-top: 15px;
+  width: 25%;
+}
+.remove-note {
+  float: right;
+  width: 5%;
+  border: none;
+}
+.chat {
+  font-style: italic;
+  margin-top: 15px;
+}
