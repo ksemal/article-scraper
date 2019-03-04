@@ -351,6 +351,7 @@ i {
   font-weight: bold;
   background: none;
   border: none;
+  font-size: 14px;
 }
 
 .navbar-default .navbar-nav > .active > a,

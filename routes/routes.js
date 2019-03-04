@@ -92,7 +92,6 @@ module.exports = function(app, axios, cheerio, db, mongoose) {
     db.Article.find({ saved: true })
       .populate("note")
       .then(function(response) {
-        console.log(response);
         res.render("saved", { newArticles: response });
       })
       .catch(function(err) {

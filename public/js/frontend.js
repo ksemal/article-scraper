@@ -26,7 +26,6 @@ $(".scrape").on("click", function(event) {
 $(".save").on("click", function(event) {
   event.preventDefault();
   var id = $(this).data("id");
-  console.log(id);
   $.ajax({
     method: "POST",
     url: "/article/" + id
@@ -59,7 +58,6 @@ $(".clear-saved").on("click", function(event) {
     method: "POST",
     url: "/clear_saved/" + id
   }).then(function(response) {
-    console.log(response);
     if (response === "many") {
       Swal.fire("Articles were removed!").then(function() {
         location.reload();
@@ -102,21 +100,21 @@ $(".add-note").on("click", function(event) {
           note +
           ' <button class="remove-note btn-sm btn-outline-warning" data-id="' +
           response.noteId +
-          '" type="button">X</button></li><hr>'
+          '" type="button">X</button><hr></li>'
       );
     });
   }
 });
 
 //delete note
-$(".remove-note").on("click", function(event) {
+$(document).on("click", ".remove-note", function(event) {
   event.preventDefault();
   var noteId = $(this).data("id");
   var articleId = $(this)
     .closest(".collapse")
     .data("id");
   $(this)
-    .parent("li")
+    .closest("li")
     .remove();
   $.ajax({
     method: "POST",
