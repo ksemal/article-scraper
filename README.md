@@ -31,3 +31,9 @@ A web application that lets users view and leave comments on the latest news. Mo
 - [axios]
 
 I think the biggest technical challenge was to use populate() method, which lets you reference documents in other collections.
+
+## Screenshots:
+
+![project screenshots](public/img/screencapture_1.png)
+
+![project screenshots](public/img/screencapture_2.png)
